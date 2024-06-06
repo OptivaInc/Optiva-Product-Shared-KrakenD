@@ -34,7 +34,6 @@ def setTag() {
         def buildNumber = String.format( "%03d" , currentBuild.number );
         tag = "$version-SNAPSHOT-${LocalDateTime.now().format(DateTimeFormatter.ofPattern('yyyyMMdd'))}${buildNumber}"
     } else {
-        
         if (branch == 'develop') {
             tag = "$version-wip.${currentBuild.number}"
         } else  if (branch.startsWith('release')) {
