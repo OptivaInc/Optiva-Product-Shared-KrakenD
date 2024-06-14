@@ -51,7 +51,6 @@ def setTag() {
 
 Closure pushImagesToHarborClosure() {
     return {
-        
         withCredentials([usernamePassword(credentialsId: 'github-app-main',
                                   usernameVariable: 'GITHUB_APP',
                                   passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
