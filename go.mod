@@ -43,11 +43,6 @@ require (
 )
 
 require (
-	github.com/spf13/cast v1.6.0
-	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.55.0
-)
-
-require (
 	cloud.google.com/go v0.115.0 // indirect
 	cloud.google.com/go/auth v0.8.1 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.4 // indirect
@@ -217,6 +212,7 @@ require (
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/sony/gobreaker v0.5.0 // indirect
 	github.com/spf13/afero v1.11.0 // indirect
+	github.com/spf13/cast v1.6.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.12.0 // indirect
@@ -285,4 +281,6 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-// replace github.com/optivainc/optiva-product-shared-krakend-telemetry => /home/darrenbell/work/development/tmf/Optiva-Product-Shared-KrakenD-Telemetry
+replace nhooyr.io/websocket => github.com/coder/websocket v1.8.7
+
+replace github.com/optivainc/optiva-product-shared-krakend-telemetry => github.com/optivainc/optiva-product-shared-krakend-telemetry v1.0.2-0.20241009150108-bcbe8ce4a1fe
