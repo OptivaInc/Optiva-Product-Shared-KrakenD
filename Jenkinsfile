@@ -10,7 +10,7 @@ optiva.addJobParam(stringParam(name: 'VERSION', defaultValue: '2.1.5',
                             description: 'Semantic version for the produced artifacts'))
                             
 optiva.addJobParam(stringParam(name: 'GOLANG_VERSION', defaultValue: '1.22.7'))
-optiva.addJobParam(stringParam(name: 'ALPINE_VERSION', defaultValue: '3.16'))
+optiva.addJobParam(stringParam(name: 'ALPINE_VERSION', defaultValue: '3.19'))
 
 
 def tag
