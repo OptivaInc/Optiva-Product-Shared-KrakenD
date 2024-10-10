@@ -285,4 +285,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace github.com/optivainc/optiva-product-shared-krakend-telemetry => /home/darrenbell/work/development/tmf/Optiva-Product-Shared-KrakenD-Telemetry
+// replace github.com/optivainc/optiva-product-shared-krakend-telemetry => /home/darrenbell/work/development/tmf/Optiva-Product-Shared-KrakenD-Telemetry
