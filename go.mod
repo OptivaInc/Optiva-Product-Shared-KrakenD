@@ -36,7 +36,7 @@ require (
 	github.com/krakendio/krakend-viper/v2 v2.0.1
 	github.com/krakendio/krakend-xml/v2 v2.1.0
 	github.com/luraproject/lura/v2 v2.7.0
-	github.com/optivainc/optiva-product-shared-krakend-telemetry v1.0.1
+	github.com/optivainc/optiva-product-shared-krakend-telemetry v1.0.2-0.20241010225041-101a48a9ee84
 	github.com/spf13/cobra v1.8.0
 	github.com/xeipuuv/gojsonschema v1.2.1-0.20200424115421-065759f9c3d7
 	golang.org/x/sync v0.8.0
@@ -282,5 +282,3 @@ require (
 )
 
 replace nhooyr.io/websocket => github.com/coder/websocket v1.8.7
-
-replace github.com/optivainc/optiva-product-shared-krakend-telemetry => github.com/optivainc/optiva-product-shared-krakend-telemetry v1.0.2-0.20241009150108-bcbe8ce4a1fe
