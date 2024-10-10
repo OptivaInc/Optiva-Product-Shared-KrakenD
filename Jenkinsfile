@@ -9,7 +9,7 @@ import java.util.*
 optiva.addJobParam(stringParam(name: 'VERSION', defaultValue: '2.1.5',
                             description: 'Semantic version for the produced artifacts'))
                             
-optiva.addJobParam(stringParam(name: 'GOLANG_VERSION', defaultValue: '1.19.3'))
+optiva.addJobParam(stringParam(name: 'GOLANG_VERSION', defaultValue: '1.22.7'))
 optiva.addJobParam(stringParam(name: 'ALPINE_VERSION', defaultValue: '3.16'))
 
 
@@ -64,7 +64,7 @@ Closure pushImagesToHarborClosure() {
                     sh("export DOCKER_PASSWORD=${DOCKER_PASSWORD}")
 
                     sh "echo 'Version=$tag'"
-                    docker.withRegistry('https://harbor.optiva.com', 'harbor-credentials') {
+                    docker.withRegistry('https://harbor-prod.optiva.com', 'harbor-credentials') {
                         def krakenImage = docker.build("oce/krakend:${tag}", "--no-cache --build-arg GITHUB_TOKEN=${GITHUB_APP}:${GITHUB_ACCESS_TOKEN} --build-arg GOLANG_VERSION=${params.GOLANG_VERSION} --build-arg ALPINE_VERSION=${params.ALPINE_VERSION} .")
                         krakenImage.push()
                         krakenImage.push('latest')
