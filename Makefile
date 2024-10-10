@@ -6,7 +6,9 @@
 
 BIN_NAME :=krakend
 OS := $(shell uname | tr '[:upper:]' '[:lower:]')
-VERSION := 2.1.5
+MODULE := github.com/krakendio/krakend-ce/v2
+VERSION := 2.7.2
+SCHEMA_VERSION := $(shell echo "${VERSION}" | cut -d '.' -f 1,2)
 GIT_COMMIT := $(shell git rev-parse --short=7 HEAD)
 PKGNAME := krakend
 LICENSE := Apache 2.0
@@ -19,10 +21,9 @@ DESC := High performance API gateway. Aggregate, filter, manipulate and add midd
 MAINTAINER := Daniel Ortiz <dortiz@krakend.io>
 DOCKER_WDIR := /tmp/fpm
 DOCKER_FPM := devopsfaith/fpm
-GOLANG_VERSION := 1.19.3
-GLIBC_VERSION := $(shell bash find_glibc.sh)
-ALPINE_VERSION := 3.16
-GITHUB_TOKEN := ${GITHUB_TOKEN}
+GOLANG_VERSION := 1.22.7
+GLIBC_VERSION := $(shell sh find_glibc.sh)
+ALPINE_VERSION := 3.19
 OS_TAG :=
 EXTRA_LDFLAGS :=
 
@@ -56,7 +57,7 @@ all: test
 build:
 	@echo "Building the binary..."
 	@go get .
-	@go build -ldflags="-X github.com/luraproject/lura/v2/core.KrakendVersion=${VERSION} \
+	@go build -ldflags="-X ${MODULE}/pkg.Version=${VERSION} -X github.com/luraproject/lura/v2/core.KrakendVersion=${VERSION} \
 	-X github.com/luraproject/lura/v2/core.GoVersion=${GOLANG_VERSION} \
 	-X github.com/luraproject/lura/v2/core.GlibcVersion=${GLIBC_VERSION} ${EXTRA_LDFLAGS}" \
 	-o ${BIN_NAME} ./cmd/krakend-ce
@@ -65,9 +66,9 @@ build:
 test: build
 	go test -v ./tests
 
-# Build KrakenD using docker (defaults to whatever the golang container uses)
+# Build KrakenD using docker (defaults to whatever the golang container uses)
 build_on_docker: docker-builder-linux
-	docker run --rm -it -v "${PWD}:/app" -w /app krakend/builder:${VERSION}-linux-generic make -e build
+	docker run --rm -it -v "${PWD}:/app" -w /app krakend/builder:${VERSION}-linux-generic sh -c "git config --global --add safe.directory /app && make -e build"
 
 # Build the container using the Dockerfile (alpine)
 docker:
@@ -125,7 +126,7 @@ builder/skel/%/etc/logrotate.d/krakend: builder/files/krakend-logrotate
 	mkdir -p "$(dir $@)"
 	cp builder/files/krakend-logrotate "$@"
 
-.PHONE: tgz
+.PHONY: tgz
 tgz: builder/skel/tgz/usr/bin/krakend
 tgz: builder/skel/tgz/etc/krakend/krakend.json
 tgz: builder/skel/tgz/etc/init.d/krakend

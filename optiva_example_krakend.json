@@ -9,7 +9,17 @@
     "telemetry/opentelemetry": {
       "service_name": "optiva_api_gateway",
       "service_version": "commit-sha-ACBDE1234",
-      "exporters": {},
+      "metric_reporting_period": 1,
+      "exporters": {
+        "prometheus": [
+          {
+            "name": "prometheus",
+            "port": 9090,
+            "process_metrics": true,
+            "go_metrics": true
+          }
+        ]
+      },
       "layers": {
         "global": {
           "disable_metrics": false,
@@ -74,14 +84,6 @@
           "pretty_print": false
         }
       }
-    },
-    "telemetry/metrics": {
-      "collection_time": "60s",
-      "proxy_disabled": false,
-      "router_disabled": false,
-      "backend_disabled": false,
-      "endpoint_disabled": false,
-      "listen_address": ":8090"
     },
     "security/cors": {
       "allow_origins": ["http://192.168.99.100:3000", "http://localhost:3000"],
