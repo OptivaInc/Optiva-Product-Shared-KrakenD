@@ -36,7 +36,7 @@ require (
 	github.com/krakendio/krakend-viper/v2 v2.0.1
 	github.com/krakendio/krakend-xml/v2 v2.1.0
 	github.com/luraproject/lura/v2 v2.7.0
-	github.com/optivainc/optiva-product-shared-krakend-telemetry v1.0.2-0.20241011063253-0444287f4746
+	github.com/optivainc/optiva-product-shared-krakend-telemetry v1.1.0
 	github.com/spf13/cobra v1.8.0
 	github.com/xeipuuv/gojsonschema v1.2.1-0.20200424115421-065759f9c3d7
 	golang.org/x/sync v0.8.0
@@ -246,7 +246,6 @@ require (
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.28.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.28.0 // indirect
 	go.opentelemetry.io/otel/exporters/prometheus v0.47.0 // indirect
-	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.28.0 // indirect
 	go.opentelemetry.io/otel/metric v1.30.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.28.0 // indirect
 	go.opentelemetry.io/otel/sdk/metric v1.28.0 // indirect
