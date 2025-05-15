@@ -59,7 +59,7 @@ Closure pushImagesToHarborClosure() {
 
                 withCredentials([usernamePassword(credentialsId: 'harbor-credentials', passwordVariable: 'DOCKER_PASSWORD',
                     usernameVariable: 'DOCKER_USERNAME')]) {
-                    env.JAVA_HOME = env.JDK_111
+                    env.JAVA_HOME = env.JDK_21
                     sh("export DOCKER_USERNAME=${DOCKER_USERNAME}")
                     sh("export DOCKER_PASSWORD=${DOCKER_PASSWORD}")
 
