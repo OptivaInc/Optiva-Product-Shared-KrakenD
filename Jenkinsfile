@@ -9,8 +9,8 @@ import java.util.*
 optiva.addJobParam(stringParam(name: 'VERSION', defaultValue: '2.9.6',
                             description: 'Semantic version for the produced artifacts'))
                             
-optiva.addJobParam(stringParam(name: 'GOLANG_VERSION', defaultValue: '1.24.11'))
-optiva.addJobParam(stringParam(name: 'ALPINE_VERSION', defaultValue: '3.21'))
+optiva.addJobParam(stringParam(name: 'GOLANG_VERSION', defaultValue: '1.24.12'))
+optiva.addJobParam(stringParam(name: 'ALPINE_VERSION', defaultValue: '3.22'))
 
 
 def tag
