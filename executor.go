@@ -315,6 +315,12 @@ type LoggerBuilder struct{}
 // NewLogger sets up the logging components as defined at the configuration.
 func (LoggerBuilder) NewLogger(cfg config.ServiceConfig) (logging.Logger, io.Writer, error) {
 	var writers []io.Writer
+
+	if telemetryConfig, _ := optiva_telemetry.ConfigGetter(cfg.ExtraConfig); telemetryConfig != nil {
+		logger, _ := optiva_telemetry.NewApplicationLogger(cfg.ExtraConfig)
+
+		return logger, nil, nil
+	}
 	gelfWriter, gelfErr := gelf.NewWriter(cfg.ExtraConfig)
 	if gelfErr == nil {
 		writers = append(writers, gelfWriterWrapper{gelfWriter})
