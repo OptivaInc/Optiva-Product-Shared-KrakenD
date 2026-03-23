@@ -46,6 +46,7 @@ import (
 	"github.com/luraproject/lura/v2/sd/dnssrv"
 	serverhttp "github.com/luraproject/lura/v2/transport/http/server"
 	server "github.com/luraproject/lura/v2/transport/http/server/plugin"
+	optiva_telemetry "github.com/optivainc/optiva-product-shared-krakend-telemetry"
 )
 
 // NewExecutor returns an executor for the cmd package. The executor initalizes the entire gateway by
