@@ -6,8 +6,8 @@
 
 BIN_NAME :=krakend
 OS := $(shell uname | tr '[:upper:]' '[:lower:]')
-MODULE := github.com/krakendio/krakend-ce/v2
-VERSION := 2.9.3
+MODULE := github.com/krakend/krakend-ce/v2
+VERSION := 2.13.2
 SCHEMA_VERSION := $(shell echo "${VERSION}" | cut -d '.' -f 1,2)
 GIT_COMMIT := $(shell git rev-parse --short=7 HEAD)
 PKGNAME := krakend
@@ -21,9 +21,9 @@ DESC := High performance API gateway. Aggregate, filter, manipulate and add midd
 MAINTAINER := Daniel Ortiz <dortiz@krakend.io>
 DOCKER_WDIR := /tmp/fpm
 DOCKER_FPM := devopsfaith/fpm
-GOLANG_VERSION := 1.24.13
+GOLANG_VERSION := 1.25.8
 GLIBC_VERSION := $(shell sh find_glibc.sh)
-ALPINE_VERSION := 3.22
+ALPINE_VERSION := 3.23
 OS_TAG :=
 EXTRA_LDFLAGS :=
 
@@ -58,7 +58,6 @@ build: cmd/krakend-ce/schema/schema.json
 	@echo "Building the binary..."
 	@go get .
 	@go build -ldflags="-X ${MODULE}/pkg.Version=${VERSION} -X github.com/luraproject/lura/v2/core.KrakendVersion=${VERSION} \
-	-X github.com/luraproject/lura/v2/core.GoVersion=${GOLANG_VERSION} \
 	-X github.com/luraproject/lura/v2/core.GlibcVersion=${GLIBC_VERSION} ${EXTRA_LDFLAGS}" \
 	-o ${BIN_NAME} ./cmd/krakend-ce
 	@echo "You can now use ./${BIN_NAME}"
@@ -68,7 +67,7 @@ test: build
 
 cmd/krakend-ce/schema/schema.json:
 	@echo "Fetching v${SCHEMA_VERSION} schema"
-	@wget --header="User-Agent: Mozilla/5.0" -qO $@ https://raw.githubusercontent.com/krakend/krakend-schema/refs/heads/main/v${SCHEMA_VERSION}/krakend.json || wget --header="User-Agent: Mozilla/5.0" -qO $@ https://krakend.io/schema/krakend.json
+	@wget -qO $@ https://raw.githubusercontent.com/krakend/krakend-schema/refs/heads/main/v${SCHEMA_VERSION}/krakend.json || wget -qO $@ https://krakend.io/schema/krakend.json
 
 # Build KrakenD using docker (defaults to whatever the golang container uses)
 build_on_docker: docker-builder-linux
@@ -76,7 +75,7 @@ build_on_docker: docker-builder-linux
 
 # Build the container using the Dockerfile (alpine)
 docker:
-	docker build --no-cache --pull --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} --build-arg GOLANG_VERSION=${GOLANG_VERSION} --build-arg ALPINE_VERSION=${ALPINE_VERSION} -t harbor-prod.optiva.com/oce/images/krakend:${VERSION} .
+	docker build --no-cache --pull --build-arg GOLANG_VERSION=${GOLANG_VERSION} --build-arg ALPINE_VERSION=${ALPINE_VERSION} -t devopsfaith/krakend:${VERSION} .
 
 docker-builder:
 	docker build --no-cache --pull --build-arg GOLANG_VERSION=${GOLANG_VERSION} --build-arg ALPINE_VERSION=${ALPINE_VERSION} -t krakend/builder:${VERSION} -f Dockerfile-builder .
@@ -87,7 +86,7 @@ docker-builder-linux:
 benchmark:
 	@mkdir -p bench_res
 	@touch bench_res/${GIT_COMMIT}.out
-	@docker run --rm -d --name krakend -v "${PWD}/tests/fixtures:/etc/krakend" -p 8080:8080 harbor-prod.optiva.com/oce/images/krakend:${VERSION} run -dc /etc/krakend/bench.json
+	@docker run --rm -d --name krakend -v "${PWD}/tests/fixtures:/etc/krakend" -p 8080:8080 devopsfaith/krakend:${VERSION} run -dc /etc/krakend/bench.json
 	@sleep 2
 	@docker run --rm -it --link krakend peterevans/vegeta sh -c \
 		"echo 'GET http://krakend:8080/test' | vegeta attack -rate=0 -duration=30s -max-workers=300 | tee results.bin | vegeta report" > bench_res/${GIT_COMMIT}.out
@@ -97,7 +96,7 @@ benchmark:
 security_scan:
 	@mkdir -p sec_scan
 	@touch sec_scan/${GIT_COMMIT}.out
-	@docker run --rm -d --name krakend -v "${PWD}/tests/fixtures:/etc/krakend" -p 8080:8080 harbor-prod.optiva.com/oce/images/krakend:${VERSION} run -dc /etc/krakend/bench.json
+	@docker run --rm -d --name krakend -v "${PWD}/tests/fixtures:/etc/krakend" -p 8080:8080 devopsfaith/krakend:${VERSION} run -dc /etc/krakend/bench.json
 	@docker run --rm -it --link krakend instrumentisto/nmap --script vuln krakend > sec_scan/${GIT_COMMIT}.out
 	@docker stop krakend
 	@cat sec_scan/${GIT_COMMIT}.out
