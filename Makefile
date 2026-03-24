@@ -86,7 +86,7 @@ docker-builder-linux:
 benchmark:
 	@mkdir -p bench_res
 	@touch bench_res/${GIT_COMMIT}.out
-	@docker run --rm -d --name krakend -v "${PWD}/tests/fixtures:/etc/krakend" -p 8080:8080 harbor-prod.optiva.com/oce/images/krakend:${VERSION} run -dc /etc/krakend/bench.json@docker run --rm -d --name krakend -v "${PWD}/tests/fixtures:/etc/krakend" -p 8080:8080 devopsfaith/krakend:${VERSION} run -dc /etc/krakend/bench.json
+	@docker run --rm -d --name krakend -v "${PWD}/tests/fixtures:/etc/krakend" -p 8080:8080 harbor-prod.optiva.com/oce/images/krakend:${VERSION} run -dc /etc/krakend/bench.json
 	@sleep 2
 	@docker run --rm -it --link krakend peterevans/vegeta sh -c \
 		"echo 'GET http://krakend:8080/test' | vegeta attack -rate=0 -duration=30s -max-workers=300 | tee results.bin | vegeta report" > bench_res/${GIT_COMMIT}.out
@@ -97,7 +97,6 @@ security_scan:
 	@mkdir -p sec_scan
 	@touch sec_scan/${GIT_COMMIT}.out
 	@docker run --rm -d --name krakend -v "${PWD}/tests/fixtures:/etc/krakend" -p 8080:8080 harbor-prod.optiva.com/oce/images/krakend:${VERSION} run -dc /etc/krakend/bench.json
-	@docker run --rm -d --name krakend -v "${PWD}/tests/fixtures:/etc/krakend" -p 8080:8080 devopsfaith/krakend:${VERSION} run -dc /etc/krakend/bench.json
 	@docker run --rm -it --link krakend instrumentisto/nmap --script vuln krakend > sec_scan/${GIT_COMMIT}.out
 	@docker stop krakend
 	@cat sec_scan/${GIT_COMMIT}.out
