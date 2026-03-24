@@ -10,34 +10,33 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-contrib/uuid"
-	gologging "github.com/krakendio/krakend-gologging/v2"
-	logstash "github.com/krakendio/krakend-logstash/v2"
 	"golang.org/x/sync/errgroup"
 
+	krakendbf "github.com/krakend/bloomfilter/v2/krakend"
+	asyncamqp "github.com/krakend/krakend-amqp/v2/async"
+	audit "github.com/krakend/krakend-audit"
+	cel "github.com/krakend/krakend-cel/v2"
+	cmd "github.com/krakend/krakend-cobra/v2"
+	cors "github.com/krakend/krakend-cors/v2/gin"
+	gelf "github.com/krakend/krakend-gelf/v2"
+	gologging "github.com/krakend/krakend-gologging/v2"
+	influxdb "github.com/krakend/krakend-influx/v2"
+	jose "github.com/krakend/krakend-jose/v2"
+	logstash "github.com/krakend/krakend-logstash/v2"
+	metrics "github.com/krakend/krakend-metrics/v2/gin"
+	opencensus "github.com/krakend/krakend-opencensus/v2"
+	_ "github.com/krakend/krakend-opencensus/v2/exporter/datadog"
+	_ "github.com/krakend/krakend-opencensus/v2/exporter/influxdb"
+	_ "github.com/krakend/krakend-opencensus/v2/exporter/jaeger"
+	_ "github.com/krakend/krakend-opencensus/v2/exporter/ocagent"
+	_ "github.com/krakend/krakend-opencensus/v2/exporter/prometheus"
+	_ "github.com/krakend/krakend-opencensus/v2/exporter/stackdriver"
+	_ "github.com/krakend/krakend-opencensus/v2/exporter/xray"
+	_ "github.com/krakend/krakend-opencensus/v2/exporter/zipkin"
 	kotel "github.com/krakend/krakend-otel"
 	otellura "github.com/krakend/krakend-otel/lura"
 	otelgin "github.com/krakend/krakend-otel/router/gin"
-	krakendbf "github.com/krakendio/bloomfilter/v2/krakend"
-	asyncamqp "github.com/krakendio/krakend-amqp/v2/async"
-	audit "github.com/krakendio/krakend-audit"
-	cel "github.com/krakendio/krakend-cel/v2"
-	cmd "github.com/krakendio/krakend-cobra/v2"
-	cors "github.com/krakendio/krakend-cors/v2/gin"
-	gelf "github.com/krakendio/krakend-gelf/v2"
-	influxdb "github.com/krakendio/krakend-influx/v2"
-	jose "github.com/krakendio/krakend-jose/v2"
-	metrics "github.com/krakendio/krakend-metrics/v2/gin"
-	opencensus "github.com/krakendio/krakend-opencensus/v2"
-	_ "github.com/krakendio/krakend-opencensus/v2/exporter/datadog"
-	_ "github.com/krakendio/krakend-opencensus/v2/exporter/influxdb"
-	_ "github.com/krakendio/krakend-opencensus/v2/exporter/jaeger"
-	_ "github.com/krakendio/krakend-opencensus/v2/exporter/ocagent"
-	_ "github.com/krakendio/krakend-opencensus/v2/exporter/prometheus"
-	_ "github.com/krakendio/krakend-opencensus/v2/exporter/stackdriver"
-	_ "github.com/krakendio/krakend-opencensus/v2/exporter/xray"
-	_ "github.com/krakendio/krakend-opencensus/v2/exporter/zipkin"
-	pubsub "github.com/krakendio/krakend-pubsub/v2"
-	usage "github.com/krakendio/krakend-usage/v2"
+	usage "github.com/krakend/krakend-usage/v2"
 	"github.com/luraproject/lura/v2/async"
 	"github.com/luraproject/lura/v2/config"
 	"github.com/luraproject/lura/v2/core"
@@ -323,7 +322,6 @@ func (LoggerBuilder) NewLogger(cfg config.ServiceConfig) (logging.Logger, io.Wri
 
 		return logger, nil, nil
 	}
-
 	gelfWriter, gelfErr := gelf.NewWriter(cfg.ExtraConfig)
 	if gelfErr == nil {
 		writers = append(writers, gelfWriterWrapper{gelfWriter})
@@ -405,7 +403,7 @@ func (m *MetricsAndTraces) Register(ctx context.Context, cfg config.ServiceConfi
 		l.Debug("[SERVICE: InfluxDB] Service correctly registered")
 	}
 
-	if err := opencensus.Register(ctx, cfg, append(opencensus.DefaultViews, pubsub.OpenCensusViews...)...); err != nil {
+	if err := opencensus.Register(ctx, cfg, opencensus.DefaultViews...); err != nil {
 		if err != opencensus.ErrNoConfig {
 			l.Warning("[SERVICE: OpenCensus]", err.Error())
 		}
@@ -461,6 +459,7 @@ func startReporter(ctx context.Context, logger logging.Logger, cfg config.Servic
 				Version:      core.KrakendVersion,
 				UserAgent:    core.KrakendUserAgent,
 				ExtraPayload: a,
+				Client:       &http.Client{Transport: serverhttp.NewTransport(cfg, logger)},
 			},
 			nil,
 		); err != nil {
