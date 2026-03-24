@@ -36,7 +36,7 @@ require (
 	github.com/krakend/krakend-usage/v2 v2.1.0
 	github.com/krakend/krakend-xml/v2 v2.2.0
 	github.com/luraproject/lura/v2 v2.14.1
-	github.com/optivainc/optiva-product-shared-krakend-telemetry v1.3.5-0.20260323080721-dd953e2be358
+	github.com/optivainc/optiva-product-shared-krakend-telemetry v1.3.6
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.2
 	github.com/spf13/cobra v1.8.1
 	golang.org/x/sync v0.19.0
