@@ -1,7 +1,7 @@
 ![Krakend logo](https://raw.githubusercontent.com/devopsfaith/krakend.io/master/images/logo.png)
 
 # KrakenD
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkrakendio%2Fkrakend-ce.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkrakendio%2Fkrakend-ce?ref=badge_shield)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkrakend%2Fkrakend-ce.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkrakend%2Fkrakend-ce?ref=badge_shield)
 
 KrakenD is an extensible, ultra-high performance API Gateway that helps you effortlessly adopt microservices and secure communications. KrakenD is easy to operate and run and scales out without a single point of failure.
 
@@ -38,9 +38,9 @@ See the [website](https://www.krakend.io) for more information.
 KrakenD is [packaged and distributed in several formats](https://www.krakend.io/download/). You don't need to clone this repo to use KrakenD unless you want to tweak and build the binary yourself.
 
 ## Run
-In its simplest form with Docker:
+In its simplest form with the [offical Docker image](https://hub.docker.com/_/krakend):
 
-    docker run -it -p "8080:8080" devopsfaith/krakend
+    docker run -it -p "8080:8080" krakend
 
 Now see [http://localhost:8080/__health](http://localhost:8080/__health). The gateway is listening. Now *CTRL-C* and replace  `/etc/krakend/krakend.json` with your [first configuration](https://designer.krakend.io).
 
@@ -58,4 +58,4 @@ make build_on_docker
 
 
 ## License
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkrakendio%2Fkrakend-ce.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkrakendio%2Fkrakend-ce?ref=badge_large)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkrakend%2Fkrakend-ce.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkrakend%2Fkrakend-ce?ref=badge_large)
